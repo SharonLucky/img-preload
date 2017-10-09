@@ -4,12 +4,37 @@
     this.opts = $.extend({}, PreLoad.DEFAULTS, options)
 
     // _表明只在内部使用，不在外部调用
-    this._unordered()
+    if (this.opts.order === "ordered") {
+      this._ordered()
+    } else {
+      this._unordered()
+    }
   }
   PreLoad.DEFAULTS = {
     each: null, // 每一张图片加载完成后执行
     all: null // 所有图片加载完成后执行
   } 
+  PreLoad.prototype._ordered = function () {
+    var imgs = this.imgs,
+        opts = this.opts,
+        count = 0,
+        len = imgs.length
+
+    load()
+    function load () {
+      var imgObj = new Image()
+      $(imgObj).on('load error', function() {
+        if (count >= len - 1) {
+          // 所有图片加载完成
+          opts.all && opts.all()
+        } else {
+          load()
+        }
+        count++
+      })
+      imgObj.src = imgs[count]
+    }
+  }
   PreLoad.prototype._unordered = function () { //无序加载
     var imgs = this.imgs,
         opts = this.opts,
