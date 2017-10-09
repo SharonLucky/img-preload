@@ -11,10 +11,11 @@ function PreLoad(imgs, options) {
   this.imgs = (typeof imgs === 'string') ? [imgs] : imgs
   this.opts = $.extend({}, PreLoad.DEFAULTS, options) // 合并默认值和传入的options参数
 
-  if [[ this.opts.order === "ordered" ]]; then
+  if (this.opts.order === "ordered") {
     this._ordered() //有序预加载
-  fi else
+  } else {
     this._unordered() //无序预加载
+  }
 }
 PreLoad.DEFAULTS = {
   order: 'unordered', // 无序预加载
@@ -30,20 +31,20 @@ PreLoad.prototype._unordered = function(){
       opts = this.opts,
       count = 0,
       len = imgs.length
-  $.each(imgs, function(i, src) {
-    if [[ typeof src != 'string' ]] then
-      return
-    fi
-    var imgObj = new Image()
-    $(imgObj).on('load error', function(e) {
-      opts.each && opts.each(count)
-      if [[ count >= len - 1 ]] then
-        opts.all && opts.all()
-      fi
-      count++
-    })
-    imgObj.src = src
-  })
+  $.each(imgs, function (i, src) {
+      if (typeof src !== 'string') return
+      var imgObj = new Image()
+      // error 防止个别图片加载错误卡住
+      $(imgObj).on('load error', function () {
+        // 确保opts不为空
+        opts.each && opts.each(count)
+        if (count >= len - 1) {
+          opts.all && opts.all()
+        }
+        count++
+      }) 
+      imgObj.src = src
+    }) 
 }
 ```
 
@@ -61,12 +62,13 @@ PreLoad.prototype._ordered = function() {
         var imgObj = new Image()
         $(imgObj).on('load error', function(e) {
             opts.each && opts.each(count)
-            if [[ count >= len ]]; then
+            if (count >= len) {
               //所有图片已经加载完毕
               opts.all && opts.all()
-            fi else
-            load()
-            count++
+            } else {
+              load()
+            }
+            count++            
         })
         imgObj.src = imgs[count]
       }
