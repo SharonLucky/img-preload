@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>图片预加载-无序加载-初始</title>
+  <title>图片预加载-无序加载-jquery插件</title>
   <style>
     html,
     body {
@@ -67,41 +67,50 @@
     </p>
   </div>
   <script src="./js/jquery.min.js"></script>
+  <script src="./js/preload.js"></script>
   <script>
     var imgs = [
       'http://i2.hoopchina.com.cn/user/308/15960308/13383588090.jpg',
       'http://img.article.pchome.net/00/44/23/20/pic_lib/wm/2.jpg',
       'http://lcd.yesky.com/imagelist/2009/044/404q4y8g4m0p.jpg',
       'http://lcd.yesky.com/imagelist/2009/044/cgro54wt2t2x.jpg'
-    ];
+    ] 
     var index = 0,
       len = imgs.length,
-      count = 0,
-      $progress = $('.progress');
-    $.each(imgs, function (i, src) {
-      var imgObj = new Image();
-      // error 防止个别图片加载错误卡住
-      $(imgObj).on('load error', function () {
-        $progress.html(Math.round((count + 1) / len * 100) + '%');
-        if (count >= len - 1) {
-          $('.loading').hide();
-          document.title = '1/' + len;
+      // count = 0,
+      $progress = $('.progress') 
+      $.preload(imgs, {
+        each: function(count) {
+          $progress.html(Math.round((count + 1) / len * 100) + '%') 
+        },
+        all: function() {
+          $('.loading').hide() 
+          document.title = '1/' + len 
         }
-        count++;
-      });
-      imgObj.src = src;
-    });
+      })
+    // $.each(imgs, function (i, src) {
+    //   var imgObj = new Image() 
+    //   $(imgObj).on('load error', function () {
+    //     $progress.html(Math.round((count + 1) / len * 100) + '%') 
+    //     if (count >= len - 1) {
+    //       $('.loading').hide() 
+    //       document.title = '1/' + len 
+    //     }
+    //     count++ 
+    //   }) 
+    //   imgObj.src = src 
+    // }) 
     $('.btn').on('click', function () {
       if ($(this).data('control') === 'prev') {
         // 先做自减再和0比较
-        index = Math.max(0, --index);
+        index = Math.max(0, --index) 
       } else {
         // 先做自增再和总长度比较
-        index = Math.min(len - 1, ++index);
+        index = Math.min(len - 1, ++index) 
       }
-      document.title = (index + 1) + '/' + len;
-      $('#img').attr('src', imgs[index]);
-    });
+      document.title = (index + 1) + '/' + len 
+      $('#img').attr('src', imgs[index]) 
+    }) 
   </script>
 </body>
 
