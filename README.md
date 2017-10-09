@@ -21,7 +21,7 @@ PreLoad.DEFAULTS = {
   order: 'unordered', // 无序预加载
   each: null, // 每张图片加载完毕后执行
   all: null // 所有图片加载完后执行
-};
+}
 ```
 
 ### 无序预加载-code

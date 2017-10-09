@@ -11,6 +11,7 @@
     }
   }
   PreLoad.DEFAULTS = {
+    order: 'unordered', // 无序预加载
     each: null, // 每一张图片加载完成后执行
     all: null // 所有图片加载完成后执行
   } 
